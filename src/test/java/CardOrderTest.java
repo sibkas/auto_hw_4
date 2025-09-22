@@ -15,6 +15,7 @@ public class CardOrderTest {
     void setup() {
         Configuration.headless = true;
         open("http://localhost:9999");
+        $("[data-test-id='city'] input").shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     @Test
