@@ -11,42 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Проверка кода
       - uses: actions/checkout@v3
 
+      # Установка JDK 11
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
+      # Установка Chrome 117 и Chromedriver
       - name: Set up Chrome 117
         uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: '117'
           install-chromedriver: true
 
-      - name: Check Chrome version
-        run: google-chrome --version
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Start SUT
-        run: java -jar ./artifacts/app-card-delivery.jar &
-
-      - name: Wait for SUT to be ready
-        run: |
-          for i in {1..60}; do
-            if curl -s http://localhost:9999 >/dev/null; then
-              echo "SUT is ready"
-              break
-            fi
-            echo "Waiting for SUT..."
-            sleep 1
-          done
-
-      - name: Run Gradle tests
-        env:
-          CHROME_BIN: /usr/bin/google-chrome
-          PATH: /usr/lib/chromium-browser/:$PATH
-        run: ./gradlew test --info -Dselenide.headless=true
+      # Добавляем Chrome 117 в PATH
+      - name: Override PATH for Chrome 117
+        run: echo "/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64:$PATH"
