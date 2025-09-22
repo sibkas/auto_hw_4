@@ -22,8 +22,8 @@ dependencies {
     // SLF4J, чтобы убрать warning
     testImplementation 'org.slf4j:slf4j-simple:2.0.7'
 
-    // DevTools для Chrome 140 (чтобы Selenide не зависал)
-    testImplementation 'org.seleniumhq.selenium:selenium-devtools-v140:4.13.0'
+    // DevTools для Selenium 4.13.0, поддержка последних версий Chrome
+    testImplementation 'org.seleniumhq.selenium:selenium-devtools:4.13.0'
 }
 
 test {
