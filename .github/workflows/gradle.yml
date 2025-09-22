@@ -22,6 +22,9 @@ jobs:
 
       - name: Set up ChromeDriver
         uses: nanasess/setup-chromedriver@v2
+        with:
+          chromedriver-version: '140.0.7339.80'
+
 
       - name: Start SUT
         run: java -jar ./artifacts/app-card-delivery.jar &
