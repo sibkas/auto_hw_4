@@ -20,6 +20,9 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Set up ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
       - name: Start SUT
         run: java -jar ./artifacts/app-card-delivery.jar &
 
