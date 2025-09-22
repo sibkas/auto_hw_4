@@ -23,11 +23,12 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set up Chrome 140
+      - name: Set up Chrome
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: '140'
+          chrome-version: '117'
           install-chromedriver: true
+
 
       
       - name: Check Chrome version
