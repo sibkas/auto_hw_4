@@ -16,28 +16,24 @@ import static com.codeborne.selenide.Selenide.*;
 public class CardOrderTest {
 
     @BeforeEach
-void setup() {
-    // Настройки Selenide
-    Configuration.headless = true;
-    Configuration.browser = "chrome";
-
-    // Создаем объект ChromeOptions
-    ChromeOptions options = new ChromeOptions();
-    options.addArguments("--headless=new");
-    options.addArguments("--disable-dev-shm-usage");
-    options.addArguments("--no-sandbox");
-    options.addArguments("--remote-allow-origins=*");
-    options.addArguments("--user-data-dir=/tmp/selenide" + System.currentTimeMillis());
-
-    // Указываем конкретный бинарник Chrome 117
-    options.setBinary("/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome");
-
-    // Присваиваем опции Selenide
-    Configuration.browserCapabilities = options;
-
-    // Открываем страницу приложения
-    open("http://localhost:9999");
+    void setup() {
+        Configuration.headless = true;
+        Configuration.browser = "chrome";
+        Configuration.driverManagerEnabled = false; 
+        Configuration.browserBinary = "/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome";
+    
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--user-data-dir=/tmp/selenide" + System.currentTimeMillis());
+    
+        Configuration.browserCapabilities = options;
+    
+        open("http://localhost:9999");
 }
+
 
 
     @Test
