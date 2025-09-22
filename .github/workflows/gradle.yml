@@ -23,7 +23,7 @@ jobs:
       - name: Set up Chrome 131 and ChromeDriver
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: '140'
+          chrome-version: '131'
           install-chromedriver: true
 
       - name: Start SUT
