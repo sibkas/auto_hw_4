@@ -16,21 +16,29 @@ import static com.codeborne.selenide.Selenide.*;
 public class CardOrderTest {
 
     @BeforeEach
-    void setup() {
-        
-        Configuration.headless = true;
-        Configuration.browser = "chrome";
-        Configuration.browserBinary = "/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome";
-        Configuration.browserCapabilities = new ChromeOptions()
-                .addArguments("--headless=new")
-                .addArguments("--disable-dev-shm-usage")
-                .addArguments("--no-sandbox")
-                .addArguments("--remote-allow-origins=*")
-                .addArguments("--user-data-dir=/tmp/selenide" + System.currentTimeMillis());
-                .setBinary("/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome");
+void setup() {
+    // Настройки Selenide
+    Configuration.headless = true;
+    Configuration.browser = "chrome";
 
-        open("http://localhost:9999");
-    }
+    // Создаем объект ChromeOptions
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless=new");
+    options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--remote-allow-origins=*");
+    options.addArguments("--user-data-dir=/tmp/selenide" + System.currentTimeMillis());
+
+    // Указываем конкретный бинарник Chrome 117
+    options.setBinary("/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome");
+
+    // Присваиваем опции Selenide
+    Configuration.browserCapabilities = options;
+
+    // Открываем страницу приложения
+    open("http://localhost:9999");
+}
+
 
     @Test
     void shouldSubmitCardOrderWithCalendarSelection() {
