@@ -6,6 +6,8 @@ import org.openqa.selenium.Keys;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+
 
 import static com.codeborne.selenide.Selenide.*;
 
