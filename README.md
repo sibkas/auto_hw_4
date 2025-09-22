@@ -1,0 +1,1 @@
+![Gradle Build and Test](https://github.com/sibkas/auto_hw_4/actions/workflows/gradle.yml/badge.svg)
