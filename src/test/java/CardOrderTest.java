@@ -7,6 +7,8 @@ import org.openqa.selenium.Keys;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.Duration;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 
 
 import static com.codeborne.selenide.Selenide.*;
@@ -15,9 +17,17 @@ public class CardOrderTest {
 
     @BeforeEach
     void setup() {
+        
         Configuration.headless = true;
+        Configuration.browser = "chrome";
+        Configuration.browserCapabilities = new ChromeOptions()
+                .addArguments("--headless=new")
+                .addArguments("--disable-dev-shm-usage")
+                .addArguments("--no-sandbox")
+                .addArguments("--remote-allow-origins=*")
+                .addArguments("--user-data-dir=/tmp/selenide" + System.currentTimeMillis());
+
         open("http://localhost:9999");
-        $("[data-test-id='city'] input").shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     @Test
