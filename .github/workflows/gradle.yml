@@ -11,26 +11,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Клонируем репозиторий
       - uses: actions/checkout@v3
 
+      # Устанавливаем JDK 11
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set up Chrome
+      # Устанавливаем Chrome stable и подходящий ChromeDriver
+      - name: Set up Chrome stable
         uses: browser-actions/setup-chrome@v2
-        with: 
+        with:
           chrome-version: 'stable'
           install-chromedriver: true
 
-      - name: Start SUT
-        run: java -jar ./artifacts/app-card-delivery.jar &
-
+      # Делаем gradlew исполняемым
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Run Gradle tests in headless mode
+      # Запускаем SUT (приложение)
+      - name: Start SUT
+        run: java -jar ./artifacts/app-card-delivery.jar &
+      
+      # Даем время на старт приложения
+      - name: Wait for SUT
+        run: sleep 10
+
+      # Запускаем тесты через Gradle в headless режиме
+      - name: Run Gradle tests
         run: ./gradlew test --info -Dselenide.headless=true
