@@ -23,12 +23,12 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      # Устанавливаем Chrome stable и подходящий ChromeDriver
-      - name: Set up Chrome stable
+      - name: Set up Chrome 140
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: 'stable'
+          chrome-version: '140'
           install-chromedriver: true
+
       
       - name: Check Chrome version
         run: google-chrome-stable --version
