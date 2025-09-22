@@ -19,7 +19,7 @@ public class CardOrderTest {
     void setup() {
         Configuration.headless = true;
         Configuration.browser = "chrome";
-        Configuration.driverManagerEnabled = false; 
+         
         Configuration.browserBinary = "/opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome";
     
         ChromeOptions options = new ChromeOptions();
