@@ -20,10 +20,10 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set up Chrome 131 and ChromeDriver
+      - name: Set up Chrome
         uses: browser-actions/setup-chrome@v2
-        with:
-          chrome-version: '131'
+        with: 
+          chrome-version: 'stable'
           install-chromedriver: true
 
       - name: Start SUT
