@@ -21,7 +21,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Start SUT
-        run: java -jar ./artifacts/app-card-delivery.jar &
+        run: java -Dserver.port=9999 -jar ./artifacts/app-card-delivery.jar &
+
+      - name: Wait for app to start
+        run: sleep 5
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
