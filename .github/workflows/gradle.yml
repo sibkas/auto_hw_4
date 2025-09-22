@@ -2,11 +2,9 @@ name: Gradle Build and Test
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
@@ -21,14 +19,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set up Chrome
+      - name: Set up Chrome 117
         uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: '117'
           install-chromedriver: true
 
       - name: Check Chrome version
-        run: /opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome --version
+        run: google-chrome --version
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -49,6 +47,6 @@ jobs:
 
       - name: Run Gradle tests
         env:
-          CHROME_BIN: /opt/hostedtoolcache/setup-chrome/chrome/117.0.5938.149/x64/chrome
-          PATH: /opt/hostedtoolcache/setup-chrome/chromedriver/117.0.5938.149/x64:$PATH
+          CHROME_BIN: /usr/bin/google-chrome
+          PATH: /usr/lib/chromium-browser/:$PATH
         run: ./gradlew test --info -Dselenide.headless=true
