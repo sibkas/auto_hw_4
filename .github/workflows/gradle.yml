@@ -29,6 +29,10 @@ jobs:
         with:
           chrome-version: 'stable'
           install-chromedriver: true
+      
+      - name: Check Chrome version
+        run: google-chrome-stable --version
+
 
       # Делаем gradlew исполняемым
       - name: Make gradlew executable
