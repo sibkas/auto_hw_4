@@ -34,13 +34,21 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # Запускаем SUT (приложение)
+      # Запуск приложения перед тестами
       - name: Start SUT
         run: java -jar ./artifacts/app-card-delivery.jar &
-      
-      # Даем время на старт приложения
-      - name: Wait for SUT
-        run: sleep 10
+
+      # Ждем, пока сервер реально поднимется (до 30 секунд)
+      - name: Wait for SUT to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:9999 >/dev/null; then
+              echo "SUT is ready"
+              break
+            fi
+            echo "Waiting for SUT..."
+            sleep 1
+          done
 
       # Запускаем тесты через Gradle в headless режиме
       - name: Run Gradle tests
