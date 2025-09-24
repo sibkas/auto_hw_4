@@ -1,15 +1,12 @@
 import com.codeborne.selenide.Condition;
-
-import com.codeborne.selenide.Selenide;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.Duration;
-import java.util.Locale;
+import java.util.List;
+
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -65,34 +62,41 @@ public class CardOrderTest {
         // Выбор из автокомплита
         $$(".menu-item").findBy(Condition.exactText("Красноярск")).click();
 
-        // Получаем дату через 7 дней
+        // Целевая дата через 7 дней
         LocalDate targetDate = LocalDate.now().plusDays(7);
-        String expectedMonth = targetDate.format(DateTimeFormatter.ofPattern("LLLL", new Locale("ru"))).toLowerCase();
-        String expectedYear = String.valueOf(targetDate.getYear());
+        int targetMonth = targetDate.getMonthValue();     // номер месяца (1–12)
+        int targetYear = targetDate.getYear();            // год
         String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         // Открываем календарь
-        $("[data-test-id='date'] .input__icon button").click();
+        $("[data-test-id='date'] button").click();
         $(".calendar__layout").shouldBe(Condition.visible);
 
-        // Навигация к нужному месяцу, с ограничением по количеству прыжков (максимум 12)
+        // Список русских месяцев для определения номера месяца в календаре
+        List<String> months = List.of(
+                "январь", "февраль", "март", "апрель", "май", "июнь",
+                "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"
+        );
+
         int maxScrolls = 12;
         int scrolls = 0;
+
         while (scrolls < maxScrolls) {
-            $(".calendar__arrow.calendar__arrow_direction_right:not(.calendar__arrow_double)").click();
-
-            Selenide.sleep(500);
-            String monthYearText = $(".calendar__name").text();
+            String monthYearText = $(".calendar__name").shouldBe(Condition.visible, Duration.ofSeconds(5)).text();
             String[] parts = monthYearText.split(" ");
-            String monthText = parts[0].toLowerCase();
-            String yearText = parts[1];
+            int calendarMonth = months.indexOf(parts[0].toLowerCase()) + 1;
+            int calendarYear = Integer.parseInt(parts[1]);
 
-
-            if (monthText.equals(expectedMonth) && yearText.equals(expectedYear)) {
+            // Если текущий месяц и год совпадают или больше целевого, останавливаем цикл
+            if (calendarYear > targetYear || (calendarYear == targetYear && calendarMonth >= targetMonth)) {
                 break;
             }
+
+            // Иначе листаем дальше
+            $(".calendar__arrow.calendar__arrow_direction_right:not(.calendar__arrow_double)").click();
             scrolls++;
         }
+
         if (scrolls == maxScrolls) {
             throw new RuntimeException("Не удалось найти нужный месяц и год в календаре");
         }
@@ -104,23 +108,20 @@ public class CardOrderTest {
         // Проверяем, что дата в поле обновилась
         $("[data-test-id='date'] input").shouldHave(Condition.value(formattedDate));
 
+        // Заполняем остальные поля и отправляем форму
+        $("[data-test-id='name'] input").setValue("Иван Иванов");
+        $("[data-test-id='phone'] input").setValue("+79991112233");
+        $("[data-test-id='agreement'] .checkbox__box").click();
+        $("button.button_view_extra").click();
 
-        // Заполняем имя, телефон и соглашаемся с условиями
-            $("[data-test-id='name'] input").setValue("Иван Иванов");
-            $("[data-test-id='phone'] input").setValue("+79991112233");
-            $("[data-test-id='agreement'] .checkbox__box").click();
-
-            // Отправляем форму
-            $("button.button_view_extra").click();
-
-            // Проверяем появление уведомления с датой
-            String expectedTextPart = "Встреча успешно забронирована на " + formattedDate;
-            $("[data-test-id='notification']")
-                    .shouldBe(Condition.visible, Duration.ofSeconds(15))
-                    .shouldHave(Condition.text(expectedTextPart));
-        }
-
-
+        // Проверяем уведомление
+        String expectedTextPart = "Встреча успешно забронирована на " + formattedDate;
+        $("[data-test-id='notification']")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.text(expectedTextPart));
     }
+
+
+}
 
 
